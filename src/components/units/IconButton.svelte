@@ -4,7 +4,8 @@
 
   export let icon;
   export let size = 16;
-  export let className = "";
+  export let className: string = null;
+  export let iconClassName: string = null;
   export let title: string = null;
   export let color = "primary";
   export let variant: ButtonVariant = "solid";
@@ -17,7 +18,7 @@
   class={clsx("btn btn-icon", `btn-${variant}`, `btn-${color}`, className)}
   on:click
 >
-  <div style={`width: ${size}px; height: ${size}px;`}>
+  <div style={`width: ${size}px; height: ${size}px;`} class={iconClassName}>
     <svelte:component this={icon} />
   </div>
 </button>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import clsx from "clsx";
   import { createEventDispatcher } from "svelte";
+  import Backdrop from "./Backdrop.svelte";
   import IconButton from "./IconButton.svelte";
 
   export let icon;
@@ -9,6 +10,10 @@
   const dispatch = createEventDispatcher();
 
   let isActionOpen = false;
+
+  function onCloseAction() {
+    isActionOpen = false;
+  }
 
   function onBtnClick(e: any) {
     if (actionButton) {
@@ -19,17 +24,23 @@
   }
 </script>
 
-<div class="fixed bottom-6 right-6">
+<div class="sticky bottom-4 right-0 md:bottom-6 md:right-6 self-end">
   <div class="wrapper">
     <IconButton
       title="Add"
-      className="!p-4 relative z-20"
+      className="relative z-20"
+      iconClassName={clsx(
+        "transition-transform",
+        isActionOpen ? "rotate-[135deg]" : "rotate-0"
+      )}
       size={24}
       {icon}
       on:click={onBtnClick}
     />
 
     {#if actionButton}
+      <Backdrop isVisible={isActionOpen} on:close={onCloseAction} />
+
       <div class={clsx("actions", isActionOpen ? "is-visible" : "")}>
         <slot />
       </div>

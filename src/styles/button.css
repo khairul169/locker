@@ -1,0 +1,33 @@
+.btn {
+  @apply px-5 py-3 rounded-lg transition-colors shadow-md min-w-[100px];
+}
+
+.btn-icon {
+  @apply aspect-square p-4 min-w-0 rounded-full;
+}
+
+/* colors */
+
+.btn-primary.btn-solid {
+  @apply bg-primary-500 hover:bg-primary-600 text-white;
+}
+
+.btn-primary.btn-outline {
+  @apply border-primary-500 hover:border-primary-600 hover:bg-primary-100 text-primary-500 dark:text-white dark:hover:bg-primary-900;
+}
+
+/* variants */
+
+.btn-outline {
+  @apply font-medium bg-transparent border;
+}
+
+.btn-ghost {
+  @apply bg-transparent hover:bg-primary-100 dark:hover:bg-primary-900 border-none shadow-none;
+}
+
+/* button sizes */
+
+.btn-sm {
+  @apply py-2;
+}

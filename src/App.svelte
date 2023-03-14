@@ -1,8 +1,11 @@
 <script lang="ts">
-  import "./app.css";
+  import "./styles/global.css";
   import HomePage from "./pages/home/HomePage.svelte";
+  import { loadColorMode } from "./stores/colorModeStore";
+
+  loadColorMode();
 </script>
 
-<div>
+<div class="app-wrapper">
   <HomePage />
 </div>

@@ -1,0 +1,24 @@
+@import "./tailwind.css";
+@import "./button.css";
+
+@layer base {
+  html {
+    @apply text-primary-900 bg-white transition-colors;
+  }
+
+  html.dark {
+    @apply text-white bg-[#171329];
+  }
+}
+
+.container {
+  @apply mx-auto;
+}
+
+.app-wrapper {
+  @apply container relative max-w-4xl p-4 md:p-8 mx-auto;
+}
+
+.text-muted {
+  @apply text-gray-400 dark:text-gray-300;
+}
