@@ -3,8 +3,6 @@
   import Header from "./Header.svelte";
   import FaSearch from "svelte-icons/fa/FaSearch.svelte";
   import FaPlus from "svelte-icons/fa/FaPlus.svelte";
-  import FaGoogle from "svelte-icons/fa/FaGoogle.svelte";
-  import FaFacebook from "svelte-icons/fa/FaFacebook.svelte";
   import FloatingButton from "../../components/units/FloatingButton.svelte";
   import Button from "../../components/units/Button.svelte";
   import ListItem from "../../components/units/ListItem.svelte";
