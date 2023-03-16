@@ -33,6 +33,6 @@
   }
 
   .backdrop.is-visible {
-    @apply bg-opacity-20 backdrop-blur-sm visible;
+    @apply bg-black bg-opacity-20 backdrop-blur-sm visible;
   }
 </style>

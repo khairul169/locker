@@ -6,8 +6,8 @@
   export let name = "";
 </script>
 
-<header class="flex items-center pt-4">
-  <h1 class="text-xl lg:text-3xl font-medium flex-1">Hello, {name} 👋</h1>
+<header class="flex items-center container-padding !pt-8 !pb-0">
+  <h1 class="text-2xl lg:text-3xl font-medium flex-1">Hello, {name} 👋</h1>
 
   <IconButton icon={FaUser} size={24} variant="ghost" />
   <ColorModeToggle />

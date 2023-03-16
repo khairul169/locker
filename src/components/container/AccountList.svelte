@@ -1,10 +1,13 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { toast } from "@zerodevx/svelte-toast";
+  import FaPencilAlt from "svelte-icons/fa/FaPencilAlt.svelte";
   import type { Account, Directory, LockerItem } from "../../types/Account";
   import { getIcon } from "../../utils/iconLibrary";
   import ListItem from "../units/ListItem.svelte";
   import { searchUtil } from "../../utils/utility";
+  import EmptyMessage from "../units/EmptyMessage.svelte";
+  import IconButton from "../units/IconButton.svelte";
 
   export let items: LockerItem[] = [];
   export let directory: Directory = null;
@@ -38,16 +41,15 @@
     if (item.isDirectory) {
       return onDirChange(item);
     }
-
-    toast.push(`Password ${item.title} copied!`);
-  }
-
-  function onItemAltClick(item: Account) {
-    toast.push(`Username ${item.title} copied!`);
+    dispatch("itemclick", item);
   }
 
   $: accounts = items
     .filter((item) => {
+      if (item.deletedAt) {
+        return false;
+      }
+
       if (search?.length >= 3) {
         return filterSearch(item, search);
       }
@@ -67,7 +69,23 @@
 </script>
 
 <div>
-  <h2 class="text-2xl mb-5">{directory?.title || "My Accounts"}</h2>
+  <div class="flex items-center mb-4 gap-3">
+    <div>
+      <h2 class="text-xl md:text-2xl">
+        {directory?.title || "My Accounts"}
+      </h2>
+      {#if directory?.description?.length > 0}
+        <p class="text-xs">{directory.description}</p>
+      {/if}
+    </div>
+    {#if directory != null}
+      <IconButton
+        icon={FaPencilAlt}
+        variant="ghost"
+        on:click={() => dispatch("itemclick", directory)}
+      />
+    {/if}
+  </div>
 
   {#if directory != null}
     <ListItem
@@ -78,19 +96,19 @@
     />
   {/if}
 
+  {#if !accounts.length}
+    <EmptyMessage class="mt-4">Account is empty.</EmptyMessage>
+  {/if}
+
   {#each accounts as item}
     <ListItem
       icon={getIcon(item.icon)}
-      iconColor={item.isDirectory ? "#e3b94d" : item.iconColor}
+      iconColor={item.iconColor || (item.isDirectory ? "#e3b94d" : "#3e2e81")}
       title={item.title}
       subtitle={item.isDirectory === false
         ? item.description || item.username || item.url
         : item.description}
-      handleDoubleClick={!item.isDirectory}
       on:click={() => onItemClick(item)}
-      on:altclick={() => {
-        if (item.isDirectory === false) onItemAltClick(item);
-      }}
     />
   {/each}
 </div>

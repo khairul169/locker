@@ -4,68 +4,92 @@
   import FaPlus from "svelte-icons/fa/FaPlus.svelte";
   import TextInput from "../../components/units/TextInput.svelte";
   import FloatingButton from "../../components/units/FloatingButton.svelte";
-  import Button from "../../components/units/Button.svelte";
-  import type { Account, Directory } from "../../types/Account";
-  import { uuidv4 } from "../../utils/utility";
+  import type { LockerItem } from "../../types/Account";
   import AccountList from "../../components/container/AccountList.svelte";
   import accountStore from "../../stores/accountStore";
   import debounce from "../../utils/debounce";
+  import homePageStore from "./homePageStore";
+  import { onMount } from "svelte";
+  import BottomSheet from "../../components/units/BottomSheet.svelte";
+  import FormAccount, {
+    initialAccountData,
+    initialDirectoryData,
+  } from "./FormAccount.svelte";
 
-  const testDirectory: Directory = {
-    isDirectory: true,
-    id: uuidv4(),
-    icon: "FaFolder",
-    title: "Google",
-    description: "My google account",
-    createdAt: new Date(),
-    updatedAt: new Date(),
+  type ModalFormAccountType = {
+    isVisible: boolean;
+    data?: LockerItem | null;
   };
 
-  const testAccount: Account = {
-    isDirectory: false,
-    id: uuidv4(),
-    icon: "FaGoogle",
-    title: "Google",
-    description: "My google account",
-    createdAt: new Date(),
-    updatedAt: new Date(),
+  let modalFormAccount: ModalFormAccountType = {
+    isVisible: false,
+    data: null,
   };
-
-  let currentDir: Directory = null;
-  let search = "";
-  $: items = accountStore.items;
 
   const onSearch = debounce((value: string) => {
-    search = value;
+    $homePageStore.search = value;
   }, 500);
+
+  onMount(() => {
+    // reset search value
+    $homePageStore.search = "";
+  });
+
+  function showModalForm(data: LockerItem) {
+    modalFormAccount = { isVisible: true, data };
+  }
+
+  $: items = accountStore.items;
 </script>
 
-<main class="flex flex-col gap-4 md:gap-6">
-  <Header name="Test" />
-  <TextInput
-    icon={FaSearch}
-    placeholder="Search for account..."
-    onValueChange={onSearch}
-    className="sticky top-4"
-  />
+<main>
+  <Header name="Khai" />
 
-  <AccountList items={$items} bind:search bind:directory={currentDir} />
+  <div
+    class="sticky top-0 container-padding bg-[var(--bg-color)] transition-colors"
+  >
+    <TextInput
+      icon={FaSearch}
+      placeholder="Search for account..."
+      onValueChange={onSearch}
+    />
+  </div>
 
-  <FloatingButton
-    icon={FaPlus}
-    actions={[
-      { key: "add-dir", title: "Add Directory" },
-      { key: "add-account", title: "Add Account" },
-    ]}
-    on:action={(e) => {
-      switch (e.detail) {
-        case "add-dir":
-          accountStore.add({ ...testDirectory, parentId: currentDir?.id });
-          break;
-        case "add-account":
-          accountStore.add({ ...testAccount, parentId: currentDir?.id });
-          break;
-      }
-    }}
-  />
+  <div class="flex flex-col gap-4 md:gap-6 container-padding">
+    <AccountList
+      items={$items}
+      bind:search={$homePageStore.search}
+      bind:directory={$homePageStore.currentDir}
+      on:itemclick={(e) => showModalForm(e.detail)}
+    />
+
+    <FloatingButton
+      icon={FaPlus}
+      actions={[
+        { key: "add-dir", title: "Add Directory" },
+        { key: "add-account", title: "Add Account" },
+      ]}
+      on:action={(e) => {
+        const parentId = $homePageStore.currentDir?.id;
+
+        switch (e.detail) {
+          case "add-dir":
+            showModalForm({ ...initialDirectoryData, parentId });
+            break;
+          case "add-account":
+            showModalForm({ ...initialAccountData, parentId });
+            break;
+        }
+      }}
+    />
+  </div>
+
+  <BottomSheet bind:isVisible={modalFormAccount.isVisible}>
+    <FormAccount
+      bind:data={modalFormAccount.data}
+      on:back={() => {
+        modalFormAccount.isVisible = false;
+      }}
+    />
+  </BottomSheet>
 </main>

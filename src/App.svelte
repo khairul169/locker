@@ -2,9 +2,7 @@
   import "./styles/global.css";
   import { SvelteToast } from "@zerodevx/svelte-toast";
   import HomePage from "./pages/home/HomePage.svelte";
-  import { loadColorMode } from "./stores/colorModeStore";
-
-  loadColorMode();
+  import "./stores/colorModeStore";
 </script>
 
 <div class="app-wrapper">

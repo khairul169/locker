@@ -1,35 +1,19 @@
-import { writable } from "svelte/store";
+import persistWritable from "../utils/persistWritable";
 
-export const isDarkMode = writable(false);
+export const isDarkMode = persistWritable("dark-mode", false);
 
-const STORAGE_COLOR_MODE = "color_mode";
-
-const setColorMode = (dark: boolean) => {
+isDarkMode.subscribe((state) => {
   const el = document.documentElement;
-  if (dark) {
+  if (state) {
     el.classList.add("dark");
   } else {
     el.classList.remove("dark");
   }
-};
+});
 
 /**
  * Toggle color mode
  */
 export const toggleColorMode = () => {
-  isDarkMode.update((value) => {
-    const newValue = !value;
-    setColorMode(newValue);
-    localStorage.setItem(STORAGE_COLOR_MODE, newValue ? "dark" : "light");
-    return newValue;
-  });
-};
-
-/**
- * Load stored color mode from local storage
- */
-export const loadColorMode = () => {
-  const colorMode = localStorage.getItem(STORAGE_COLOR_MODE) === "dark";
-  isDarkMode.set(colorMode);
-  setColorMode(colorMode);
+  isDarkMode.update((value) => !value);
 };

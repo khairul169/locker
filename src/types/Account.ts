@@ -1,5 +1,5 @@
 type BaseItem = {
-  id: string;
+  id?: string;
   parentId?: string;
   icon: string;
   iconColor?: string;
@@ -7,6 +7,7 @@ type BaseItem = {
   description?: string;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
 };
 
 export type Account = BaseItem & {

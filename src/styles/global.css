@@ -1,14 +1,14 @@
 @import "./tailwind.css";
 @import "./components.css";
 
-@layer base {
-  html {
-    @apply text-primary-900 bg-white transition-colors;
-  }
+html {
+  --bg-color: #ffffff;
+  @apply text-primary-900 bg-[var(--bg-color)] transition-colors;
+}
 
-  html.dark {
-    @apply text-white bg-[#171329];
-  }
+html.dark {
+  --bg-color: #171329;
+  @apply text-white bg-[var(--bg-color)];
 }
 
 .container {
@@ -16,7 +16,12 @@
 }
 
 .app-wrapper {
-  @apply container relative max-w-4xl p-4 md:p-8 mx-auto;
+  @apply container relative max-w-4xl mx-auto;
+}
+
+.app-wrapper.padding,
+.container-padding {
+  @apply p-4;
 }
 
 .text-muted {
