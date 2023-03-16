@@ -1,5 +1,5 @@
 @import "./tailwind.css";
-@import "./button.css";
+@import "./components.css";
 
 @layer base {
   html {

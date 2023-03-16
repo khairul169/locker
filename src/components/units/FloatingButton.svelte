@@ -2,10 +2,16 @@
   import clsx from "clsx";
   import { createEventDispatcher } from "svelte";
   import Backdrop from "./Backdrop.svelte";
+  import Button from "./Button.svelte";
   import IconButton from "./IconButton.svelte";
 
+  type ActionItem = {
+    key: string;
+    title: string;
+  };
+
   export let icon;
-  export let actionButton = false;
+  export let actions: ActionItem[] = null;
 
   const dispatch = createEventDispatcher();
 
@@ -16,11 +22,16 @@
   }
 
   function onBtnClick(e: any) {
-    if (actionButton) {
+    if (actions) {
       isActionOpen = !isActionOpen;
     } else {
       dispatch("click", e);
     }
+  }
+
+  function onActionClick(item: ActionItem) {
+    dispatch("action", item.key);
+    onCloseAction();
   }
 </script>
 
@@ -38,11 +49,17 @@
       on:click={onBtnClick}
     />
 
-    {#if actionButton}
+    {#if actions}
       <Backdrop isVisible={isActionOpen} on:close={onCloseAction} />
 
       <div class={clsx("actions", isActionOpen ? "is-visible" : "")}>
-        <slot />
+        {#each actions as item}
+          <Button
+            className="btn-sm"
+            variant="outline"
+            on:click={() => onActionClick(item)}>{item.title}</Button
+          >
+        {/each}
       </div>
     {/if}
   </div>
